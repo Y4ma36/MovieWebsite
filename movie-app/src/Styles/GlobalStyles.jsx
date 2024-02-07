@@ -9,7 +9,7 @@ ${reset}
 }
 body{
     color:#f5f6fa;
-    
+    background-color : black ;
 }
 
 `;

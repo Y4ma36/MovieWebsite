@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { animate, motion, useAnimation, useScroll } from "framer-motion";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 const RightMenu = styled.div`
   @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;700&display=swap");
@@ -41,6 +42,9 @@ const Notifi = styled.span`
     height: 25px;
     fill: white;
   }
+  @media ${({ theme }) => theme.device.tablet} {
+    display: none;
+  }
 `;
 
 const Profile = styled.span`
@@ -50,6 +54,60 @@ const Profile = styled.span`
 const Picture = styled.img``;
 
 const UserName = styled.h3``;
+
+const Menu = styled.span`
+  margin-left: 10px;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  svg {
+    height: 25px;
+    fill: white;
+    cursor: pointer;
+  }
+  @media ${({ theme }) => theme.device.tablet} {
+    display: block;
+  }
+`;
+
+const MenuList = styled(motion.div)`
+  transform-origin: top center;
+  width: 150px;
+  height: 300px;
+  left: -100px;
+  right: 0px;
+  margin: 0 auto;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 15px;
+  position: absolute;
+  @media ${({ theme }) => theme.device.tablet} {
+    width: 100px;
+    height: 230px;
+    left: -50px;
+  }
+`;
+
+const MenuUl = styled.ul`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+`;
+
+const MenuLi = styled.li`
+  font-size: 20px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &:hover {
+    background-color: gray;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+`;
 
 const RightHeader = () => {
   const [open, setOpen] = useState(false);
@@ -86,6 +144,31 @@ const RightHeader = () => {
           <Picture></Picture>
           <UserName>Elijah Kim</UserName>
         </Profile>
+        <Menu>
+          <motion.svg
+            xmlns="http://www.w3.org/2000/svg"
+            onClick={isOpen}
+            viewBox="0 0 448 512"
+          >
+            <path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z" />
+          </motion.svg>
+          <MenuList
+            transition={{ type: "linear" }}
+            animate={{ scaleY: open ? 1 : 0 }}
+          >
+            <MenuUl>
+              <MenuLi>
+                <Link to="/movie">Movie</Link>
+              </MenuLi>
+              <MenuLi>
+                <Link to="/tv">Tv Shows</Link>
+              </MenuLi>
+              <MenuLi>
+                <Link to="/mylist"> My List</Link>
+              </MenuLi>
+            </MenuUl>
+          </MenuList>
+        </Menu>
       </RightMenu>
     </>
   );
