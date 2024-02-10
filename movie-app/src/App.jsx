@@ -11,7 +11,7 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />}></Route>
-        <Route path="/moive" element={<Movie />}></Route>
+        <Route path="/movie/*" element={<Movie />}></Route>
         <Route path="/tv" element={<Tv />}></Route>
         <Route path="/mylist" element={<MyList />}></Route>
       </Routes>
