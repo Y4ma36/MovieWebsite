@@ -1,149 +1,99 @@
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
+import React, { useState } from "react";
+import styled from "styled-components";
 import { getPopularTvShows } from "../../Services/api";
 import { makeImagePath } from "../../Utils/MovieImage";
+import { AnimatePresence, motion } from "framer-motion";
 
 const Title = styled.h1`
   @import url("https://fonts.googleapis.com/css2?family=Protest+Strike&display=swap");
   font-size: 45px;
   font-family: "Protest Strike", sans-serif;
   padding: 40px;
+  color: white;
 `;
 
 const Slider = styled.div`
   position: relative;
-
   svg {
-    position: absolute;
     height: 60px;
+    position: absolute;
     cursor: pointer;
-    path {
-      fill: white;
-    }
     &:first-child {
-      top: 200px;
+      top: 225px;
       left: -20px;
       z-index: 1;
     }
     &:last-child {
-      top: 200px;
+      top: 225px;
       right: -20px;
+      z-index: 1;
+    }
+    path {
+      fill: white;
     }
   }
 `;
 
 const Row = styled(motion.div)`
+  width: 100%;
   display: grid;
-  gap: 10px;
-  width: 100%;
   grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
   position: absolute;
 `;
 
-const Box = styled(motion.div)`
-  height: 450px;
-  background-image: url(${(props) => props.bgphoto});
-  background-size: cover;
-  background-position: center center;
-  font-size: 50px;
-  position: relative;
-  &:first-child {
-    transform-origin: center left;
-  }
-  &:last-child {
-    transform-origin: center right;
-  }
-`;
-
-const Info = styled(motion.div)`
-  background-color: #353b48;
-  height: 200px;
-  opacity: 0;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  h4 {
-    text-align: center;
-    font-size: 20px;
-  }
-`;
-
-const rowVariants = {
+const rowVariant = {
   hidden: (back) => ({
-    x: back ? -window.innerWidth : window.innerWidth,
+    x: back ? window.innerWidth : -window.innerWidth,
   }),
   visible: {
     x: 0,
   },
   exit: (back) => ({
-    x: back ? window.innerWidth : -window.innerWidth,
+    x: back ? -window.innerWidth : window.innerWidth,
   }),
 };
 
-const boxVariants = {
-  normal: {
-    scale: 1,
-    transition: {
-      type: "tween",
-    },
-  },
-  hover: {
-    zIndex: 99,
-    scale: 1.2,
-    y: -45,
-    transition: {
-      delay: 0.5,
-      duration: 0.3,
-      type: "tween",
-    },
-  },
-};
+const Box = styled.div`
+  height: 450px;
+  background-image: url(${(props) => props.bgphoto});
+  background-position: center center;
+  background-size: cover;
+`;
 
-const infoVariants = {
-  hover: {
-    opacity: 1,
-    transition: {
-      delay: 0.5,
-      duration: 0.3,
-      type: "tween",
-    },
-  },
-};
-
-const TrendingSlider = () => {
+const PopularTvSlider = () => {
   const { data } = useQuery({
-    queryKey: ["items"],
+    queryKey: ["PopularTvShows"],
     queryFn: getPopularTvShows,
   });
-
   const [index, setIndex] = useState(0);
-  const [back, setBack] = useState(false);
   const [leaving, setLeaving] = useState(false);
-
+  const [back, setBack] = useState(false);
   const offSet = 6;
 
-  const increaseIndex = () => {
-    handleIndex("increase");
+  const handleIndex = (action) => {
+    if (leaving) {
+      return null;
+    }
+    let totalMovie = data.results.length - 2;
+    let maxIndex = totalMovie / 6 - 1;
+    toggleLeaving();
+    if (action === "decrease") {
+      setBack(false);
+      setIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
+    }
+    if (action === "increase") {
+      setBack(true);
+      setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
+    }
   };
+
   const decreaseIndex = () => {
     handleIndex("decrease");
   };
-  const handleIndex = (action) => {
-    if (leaving) return;
-    toggleLeaving();
-    const totalTv = data.results.length;
-    const maxIndex = Math.floor(totalTv / offSet) - 1;
-
-    if (action === "increase") {
-      setBack(false);
-      setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
-    }
-    if (action === "decrease") {
-      setBack(true);
-      setIndex((prev) => (prev === 0 ? 2 : prev - 1));
-    }
+  const increaseIndex = () => {
+    handleIndex("increase");
   };
 
   const toggleLeaving = () => {
@@ -153,25 +103,24 @@ const TrendingSlider = () => {
   if (!data || !data.results) {
     return null;
   }
-
   return (
     <>
-      <Title>Top Tv Shows</Title>
+      <Title>Popular Movie</Title>
       <Slider>
-        <svg
+        <motion.svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 512 512"
           onClick={decreaseIndex}
         >
           <path d="M512 256A256 256 0 1 0 0 256a256 256 0 1 0 512 0zM217.4 376.9L117.5 269.8c-3.5-3.8-5.5-8.7-5.5-13.8s2-10.1 5.5-13.8l99.9-107.1c4.2-4.5 10.1-7.1 16.3-7.1c12.3 0 22.3 10 22.3 22.3l0 57.7 96 0c17.7 0 32 14.3 32 32l0 32c0 17.7-14.3 32-32 32l-96 0 0 57.7c0 12.3-10 22.3-22.3 22.3c-6.2 0-12.1-2.6-16.3-7.1z" />
-        </svg>
+        </motion.svg>
         <AnimatePresence
           initial={false}
           onExitComplete={toggleLeaving}
           custom={back}
         >
           <Row
-            variants={rowVariants}
+            variants={rowVariant}
             initial="hidden"
             animate="visible"
             exit="exit"
@@ -181,32 +130,24 @@ const TrendingSlider = () => {
           >
             {data.results
               .slice(offSet * index, offSet * index + offSet)
-              .map((tv) => (
+              .map((movie) => (
                 <Box
-                  key={tv.id}
-                  variants={boxVariants}
-                  initial="normal"
-                  whileHover="hover"
-                  transition={{ type: "tween" }}
-                  bgphoto={makeImagePath(tv.poster_path, "w500")}
-                >
-                  <Info variants={infoVariants}>
-                    <h4>{tv.name}</h4>
-                  </Info>
-                </Box>
+                  bgphoto={makeImagePath(movie.poster_path, "w500")}
+                  key={movie.id}
+                ></Box>
               ))}
           </Row>
         </AnimatePresence>
-        <svg
+        <motion.svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 512 512"
           onClick={increaseIndex}
         >
           <path d="M0 256a256 256 0 1 0 512 0A256 256 0 1 0 0 256zM294.6 135.1l99.9 107.1c3.5 3.8 5.5 8.7 5.5 13.8s-2 10.1-5.5 13.8L294.6 376.9c-4.2 4.5-10.1 7.1-16.3 7.1C266 384 256 374 256 361.7l0-57.7-96 0c-17.7 0-32-14.3-32-32l0-32c0-17.7 14.3-32 32-32l96 0 0-57.7c0-12.3 10-22.3 22.3-22.3c6.2 0 12.1 2.6 16.3 7.1z" />
-        </svg>
+        </motion.svg>
       </Slider>
     </>
   );
 };
 
-export default TrendingSlider;
+export default PopularTvSlider;

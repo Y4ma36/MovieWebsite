@@ -1,9 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./Pages/Home";
 import Tv from "./Pages/Tv";
-import Header from "./Components/Header/Header";
+import Header from "../src/Common/Header/Header";
 import MyList from "./Pages/MyList";
 import Movie from "./Pages/Movie";
+import Footer from "./Common/Footer/Footer";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/tv" element={<Tv />}></Route>
         <Route path="/mylist" element={<MyList />}></Route>
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 }

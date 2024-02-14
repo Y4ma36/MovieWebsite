@@ -10,7 +10,7 @@ import TrendingMovieSlider from "../Components/HomeSlider/TrendingMovieSlider";
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  overflow: auto;
+  overflow-x: hidden;
   position: relative;
 `;
 
@@ -97,12 +97,14 @@ const TrendingTvList = styled.div`
   height: 600px;
   background-color: black;
   padding: 0px 30px;
+  overflow: hidden;
 `;
 
 const TrendingMovieList = styled.div`
   width: 100%;
   height: 600px;
   padding: 0px 30px;
+  overflow: hidden;
 `;
 
 const Home = () => {

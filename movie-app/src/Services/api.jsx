@@ -12,6 +12,10 @@ const LANGUAGE = "language=en-US";
 //https://api.themoviedb.org/3/movie/now_playing
 //Top rated movie
 //https://api.themoviedb.org/3/movie/top_rated
+//Airing Today
+//https://api.themoviedb.org/3/tv/airing_today
+//Genre
+//https://api.themoviedb.org/3/genre/tv/list
 
 export async function getTrendingMovies() {
   const response = await fetch(
@@ -44,6 +48,27 @@ export async function getNowPlayingMovie() {
 export async function getTopRatedMovie() {
   const response = await fetch(
     `${BASE_PATH}/movie/top_rated?api_key=${TMDBAPIKEY}&${LANGUAGE}/`
+  );
+  return await response.json();
+}
+
+export async function getAiringToday() {
+  const response = await fetch(
+    `${BASE_PATH}/tv/airing_today?api_key=${TMDBAPIKEY}`
+  );
+  return await response.json();
+}
+
+export async function getGenre() {
+  const response = await fetch(
+    `${BASE_PATH}/genre/tv/list?api_key=${TMDBAPIKEY}`
+  );
+  return await response.json();
+}
+
+export async function getTopRatedTv() {
+  const response = await fetch(
+    `${BASE_PATH}/tv/top_rated?api_keys=${TMDBAPIKEY}`
   );
   return await response.json();
 }

@@ -1,76 +1,105 @@
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useQueries, useQuery } from "@tanstack/react-query";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useQuery } from "@tanstack/react-query";
-import { getPopularTvShows } from "../../Services/api";
+import { getAiringToday, getGenre } from "../../Services/api";
+import { AnimatePresence, motion, useScroll } from "framer-motion";
 import { makeImagePath } from "../../Utils/MovieImage";
+import TvshowGenresName from "./TvshowGenresName";
 
 const Title = styled.h1`
   @import url("https://fonts.googleapis.com/css2?family=Protest+Strike&display=swap");
   font-size: 45px;
   font-family: "Protest Strike", sans-serif;
   padding: 40px;
+  color: white;
 `;
-
 const Slider = styled.div`
   position: relative;
-
   svg {
+    height: 65px;
     position: absolute;
-    height: 60px;
     cursor: pointer;
-    path {
-      fill: white;
-    }
     &:first-child {
-      top: 200px;
+      top: 160px;
       left: -20px;
       z-index: 1;
     }
     &:last-child {
-      top: 200px;
+      top: 160px;
       right: -20px;
+      z-index: 1;
+    }
+    path {
+      fill: white;
     }
   }
 `;
 
 const Row = styled(motion.div)`
-  display: grid;
-  gap: 10px;
   width: 100%;
-  grid-template-columns: repeat(6, 1fr);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
   position: absolute;
 `;
 
 const Box = styled(motion.div)`
-  height: 450px;
+  height: 350px;
+  width: 100%;
   background-image: url(${(props) => props.bgphoto});
   background-size: cover;
-  background-position: center center;
-  font-size: 50px;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 20px;
   position: relative;
-  &:first-child {
-    transform-origin: center left;
-  }
-  &:last-child {
-    transform-origin: center right;
-  }
 `;
 
-const Info = styled(motion.div)`
-  background-color: #353b48;
-  height: 200px;
-  opacity: 0;
+const Overlay = styled.div`
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  position: absolute;
+`;
+
+const CountryWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  background-color: #7f8fa6;
+  opacity: 0.8;
+  border-radius: 10px;
+  width: 85px;
+  height: 50px;
+  right: 30px;
+  top: 40px;
+  position: absolute;
+`;
+
+const Country = styled.div`
+  font-size: 25px;
+`;
+
+const Information = styled.div`
+  padding-bottom: 40px;
+  padding-left: 30px;
+  z-index: 1;
   position: absolute;
   bottom: 0;
-  width: 100%;
-  h4 {
-    text-align: center;
-    font-size: 20px;
-  }
+  left: 10px;
 `;
 
-const rowVariants = {
+const Genres = styled.h3`
+  font-size: 20px;
+  margin-bottom: 10px;
+`;
+
+const TvshowTitle = styled.h2`
+  font-size: 30px;
+  width: 70%;
+`;
+
+const rowVariant = {
   hidden: (back) => ({
     x: back ? -window.innerWidth : window.innerWidth,
   }),
@@ -82,81 +111,53 @@ const rowVariants = {
   }),
 };
 
-const boxVariants = {
-  normal: {
-    scale: 1,
-    transition: {
-      type: "tween",
-    },
-  },
-  hover: {
-    zIndex: 99,
-    scale: 1.2,
-    y: -45,
-    transition: {
-      delay: 0.5,
-      duration: 0.3,
-      type: "tween",
-    },
-  },
-};
-
-const infoVariants = {
-  hover: {
-    opacity: 1,
-    transition: {
-      delay: 0.5,
-      duration: 0.3,
-      type: "tween",
-    },
-  },
-};
-
-const TrendingSlider = () => {
-  const { data } = useQuery({
-    queryKey: ["items"],
-    queryFn: getPopularTvShows,
+const AiringTodaySlider = () => {
+  const { data: airingToday } = useQuery({
+    queryKey: ["airingToday"],
+    queryFn: getAiringToday,
   });
 
   const [index, setIndex] = useState(0);
   const [back, setBack] = useState(false);
   const [leaving, setLeaving] = useState(false);
 
-  const offSet = 6;
+  const offSet = 3;
 
-  const increaseIndex = () => {
-    handleIndex("increase");
-  };
-  const decreaseIndex = () => {
-    handleIndex("decrease");
-  };
   const handleIndex = (action) => {
-    if (leaving) return;
+    if (leaving) {
+      return null;
+    }
+    let totalAiringToday = airingToday.results.length - 5;
+    let maxIndex = totalAiringToday / 3;
     toggleLeaving();
-    const totalTv = data.results.length;
-    const maxIndex = Math.floor(totalTv / offSet) - 1;
-
     if (action === "increase") {
       setBack(false);
       setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
     }
     if (action === "decrease") {
       setBack(true);
-      setIndex((prev) => (prev === 0 ? 2 : prev - 1));
+      setIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
     }
+  };
+  const increaseIndex = () => {
+    handleIndex("increase");
+  };
+
+  const decreaseIndex = () => {
+    handleIndex("decrease");
   };
 
   const toggleLeaving = () => {
     setLeaving((prev) => !prev);
   };
 
-  if (!data || !data.results) {
+  if (!airingToday || !airingToday.results) {
     return null;
   }
 
   return (
     <>
-      <Title>Top Tv Shows</Title>
+      <Title>Airing Today ({airingToday.results.length - 5})</Title>
       <Slider>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -171,29 +172,33 @@ const TrendingSlider = () => {
           custom={back}
         >
           <Row
-            variants={rowVariants}
+            variants={rowVariant}
             initial="hidden"
             animate="visible"
             exit="exit"
-            custom={back}
             transition={{ type: "tween", duration: "1.2" }}
             key={index}
+            custom={back}
           >
-            {data.results
+            {airingToday.results
               .slice(offSet * index, offSet * index + offSet)
-              .map((tv) => (
-                <Box
-                  key={tv.id}
-                  variants={boxVariants}
-                  initial="normal"
-                  whileHover="hover"
-                  transition={{ type: "tween" }}
-                  bgphoto={makeImagePath(tv.poster_path, "w500")}
-                >
-                  <Info variants={infoVariants}>
-                    <h4>{tv.name}</h4>
-                  </Info>
-                </Box>
+              .map((tvShow) => (
+                <>
+                  <Box
+                    bgphoto={makeImagePath(tvShow.backdrop_path)}
+                    key={tvShow.id}
+                  >
+                    <CountryWrapper>
+                      <Country>{tvShow.origin_country}</Country>
+                    </CountryWrapper>
+                    <Information>
+                      <Genres>Tv Shows</Genres>
+                      <TvshowTitle>{tvShow.name}</TvshowTitle>
+                      <TvshowGenresName genresId={tvShow.genre_ids} />
+                    </Information>
+                  </Box>
+                  <Overlay />
+                </>
               ))}
           </Row>
         </AnimatePresence>
@@ -209,4 +214,4 @@ const TrendingSlider = () => {
   );
 };
 
-export default TrendingSlider;
+export default AiringTodaySlider;

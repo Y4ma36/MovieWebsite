@@ -50,7 +50,6 @@ const Overlay = styled.div`
 const Content = styled.div`
   display: flex;
   flex-direction: column;
-
   z-index: 2;
 `;
 
@@ -135,11 +134,13 @@ const PopularMovie = styled.div`
   width: 100%;
   height: 600px;
   padding: 0px 30px;
+  overflow: hidden;
 `;
 const TopRatedMovie = styled.div`
   width: 100%;
   height: 600px;
   padding: 0px 30px;
+  overflow: hidden;
 `;
 
 const Movie = () => {

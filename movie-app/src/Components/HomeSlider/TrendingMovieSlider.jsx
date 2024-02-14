@@ -15,18 +15,17 @@ const Title = styled.h1`
 
 const Slider = styled.div`
   position: relative;
-
   svg {
     height: 60px;
     position: absolute;
     cursor: pointer;
     &:first-child {
-      top: 225px;
+      top: 200px;
       left: -20px;
       z-index: 1;
     }
     &:last-child {
-      top: 225px;
+      top: 200px;
       right: -20px;
       z-index: 1;
     }
@@ -47,10 +46,16 @@ const Row = styled(motion.div)`
 const Box = styled(motion.div)`
   height: 450px;
   background-image: url(${(props) => props.bgphoto});
-  background-position: center center;
   background-size: cover;
+  background-position: center center;
   background-repeat: no-repeat;
   position: relative;
+  &:first-child {
+    transform-origin: center left;
+  }
+  &:last-child {
+    transform-origin: center right;
+  }
 `;
 
 const rowVariant = {
