@@ -59,16 +59,13 @@ export async function getAiringToday() {
   return await response.json();
 }
 
-export async function getGenre() {
-  const response = await fetch(
-    `${BASE_PATH}/genre/tv/list?api_key=${TMDBAPIKEY}`
-  );
-  return await response.json();
-}
-
 export async function getTopRatedTv() {
   const response = await fetch(
     `${BASE_PATH}/tv/top_rated?api_keys=${TMDBAPIKEY}`
   );
   return await response.json();
+}
+
+export function getDetailTv(tvId) {
+  return `${BASE_PATH}/tv/${tvId}?api_key=${TMDBAPIKEY}`;
 }

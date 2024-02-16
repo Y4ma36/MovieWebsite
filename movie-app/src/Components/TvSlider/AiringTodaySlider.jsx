@@ -1,10 +1,9 @@
 import { useQueries, useQuery } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { getAiringToday, getGenre } from "../../Services/api";
+import { getAiringToday } from "../../Services/api";
 import { AnimatePresence, motion, useScroll } from "framer-motion";
 import { makeImagePath } from "../../Utils/MovieImage";
-import TvshowGenresName from "./TvshowGenresName";
 
 const Title = styled.h1`
   @import url("https://fonts.googleapis.com/css2?family=Protest+Strike&display=swap");
@@ -194,7 +193,6 @@ const AiringTodaySlider = () => {
                     <Information>
                       <Genres>Tv Shows</Genres>
                       <TvshowTitle>{tvShow.name}</TvshowTitle>
-                      <TvshowGenresName genresId={tvShow.genre_ids} />
                     </Information>
                   </Box>
                   <Overlay />
