@@ -61,11 +61,26 @@ export async function getAiringToday() {
 
 export async function getTopRatedTv() {
   const response = await fetch(
-    `${BASE_PATH}/tv/top_rated?api_keys=${TMDBAPIKEY}`
+    `${BASE_PATH}/tv/top_rated?api_key=${TMDBAPIKEY}`
   );
   return await response.json();
 }
 
-export function getDetailTv(tvId) {
-  return `${BASE_PATH}/tv/${tvId}?api_key=${TMDBAPIKEY}`;
+export async function getDetailTv(tvId) {
+  const response = await fetch(`${BASE_PATH}/tv/${tvId}?api_key=${TMDBAPIKEY}`);
+  return await response.json();
+}
+
+export async function getDetailMovie(movieId) {
+  const response = await fetch(
+    `${BASE_PATH}/movie/${movieId}?api_key=${TMDBAPIKEY}`
+  );
+  return await response.json();
+}
+
+export async function getVideoMovie(imdb_Id) {
+  const response = await fetch(
+    `${BASE_PATH}/movie/${imdb_Id}/videos?api_key=${TMDBAPIKEY}`
+  );
+  return await response.json();
 }

@@ -35,7 +35,6 @@ const Col = styled.div`
 
 const Header = () => {
   const { scrollY } = useScroll();
-  const [scroll, setScroll] = useState(0);
   const navAnimation = useAnimation();
   useMotionValueEvent(scrollY, "change", (latest) => {
     if (latest > 90) {

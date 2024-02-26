@@ -11,9 +11,9 @@ function App() {
     <BrowserRouter>
       <Header />
       <Routes>
-        <Route path="/" element={<Home />}></Route>
+        <Route path="/*" element={<Home />}></Route>
         <Route path="/movie/*" element={<Movie />}></Route>
-        <Route path="/tv" element={<Tv />}></Route>
+        <Route path="/tv/*" element={<Tv />}></Route>
         <Route path="/mylist" element={<MyList />}></Route>
       </Routes>
       <Footer />

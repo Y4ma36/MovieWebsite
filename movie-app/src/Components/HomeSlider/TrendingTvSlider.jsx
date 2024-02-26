@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
 import { getPopularTvShows } from "../../Services/api";
 import { makeImagePath } from "../../Utils/MovieImage";
-import InfoList from "./InfoList";
+import InfoList from "../../Common/TvInfoList";
 
 const Title = styled.h1`
   @import url("https://fonts.googleapis.com/css2?family=Protest+Strike&display=swap");
