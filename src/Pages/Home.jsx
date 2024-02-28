@@ -123,16 +123,19 @@ const Home = () => {
   }, []);
 
   const numOfItem = windowWidth <= 800 ? 3 : 5;
+  console.log(process.env.REACT_APP_MOVIE_API_KEY);
   return (
     <Wrapper>
       {isLoading ? (
         <Loader>Loading...</Loader>
       ) : (
         <>
-          <Banner bgphoto={makeImagePath(data?.results[0].backdrop_path || "")}>
+          <Banner
+            bgphoto={makeImagePath(data?.results?.[0]?.backdrop_path || "")}
+          >
             <Head>Top Trending</Head>
             <Item>
-              {data.results.slice(1, 1 + numOfItem).map((items) => (
+              {data.results?.slice(1, 1 + numOfItem).map((items) => (
                 <ItemList
                   key={items.id}
                   whileHover={{ scale: 1.3 }}
