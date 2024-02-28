@@ -27,9 +27,11 @@
     "build": "react-scripts build",
     "postbuild": "cp build/index.html build/404.html",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
-  "homepage": "https://y4ma36.github.io/MovieWebsite",
+  "homepage": "https://y4ma36.github.io/MovieWebsite/",
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -50,6 +52,7 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@babel/plugin-transform-private-property-in-object": "^7.23.4"
+    "@babel/plugin-transform-private-property-in-object": "^7.23.4",
+    "gh-pages": "^6.1.1"
   }
 }
