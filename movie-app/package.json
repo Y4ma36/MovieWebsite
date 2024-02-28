@@ -29,6 +29,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "homepage": "https://y4ma36.github.io/MovieWebsite",
   "eslintConfig": {
     "extends": [
       "react-app",
