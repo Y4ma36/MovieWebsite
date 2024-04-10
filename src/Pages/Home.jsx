@@ -144,12 +144,12 @@ const Home = () => {
               ))}
             </Item>
           </Banner>
-          <TrendingTvList>
-            <TrendingSlider />
-          </TrendingTvList>
           <TrendingMovieList>
             <TrendingMovieSlider />
           </TrendingMovieList>
+          <TrendingTvList>
+            <TrendingSlider />
+          </TrendingTvList>
         </>
       )}
     </Wrapper>

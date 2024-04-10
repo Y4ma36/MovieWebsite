@@ -65,6 +65,31 @@ const Info = styled(motion.div)`
   width: 100%;
 `;
 
+const BackgroundOverlay = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  z-index: 10;
+`;
+
+const TvOverlayWrapper = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 40vw;
+  height: 90vh;
+  margin: auto;
+  background-color: black;
+  z-index: 50;
+`;
+
 const rowVariants = {
   hidden: (back) => ({
     x: back ? -window.innerWidth : window.innerWidth,
@@ -116,7 +141,6 @@ const TrendingSlider = () => {
   const [index, setIndex] = useState(0);
   const [back, setBack] = useState(false);
   const [leaving, setLeaving] = useState(false);
-
   const offSet = 6;
 
   const increaseIndex = () => {
